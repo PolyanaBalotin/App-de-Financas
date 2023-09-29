@@ -31,7 +31,7 @@ const list = [
 export default function Home() {
   return (
     <View style={styles.container}>
-      <Header name='Polyana' />
+      <Header />
 
       <Balance saldo='23.567,00' gastos='-4.244,00' />
 

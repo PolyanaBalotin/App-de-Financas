@@ -1,23 +1,44 @@
-import React from "react";
-import { Feather } from '@expo/vector-icons'
+import React, { useState, useEffect } from 'react';
+import { MaterialIcons } from '@expo/vector-icons'
+import * as ImagePicker from 'expo-image-picker';
 import {
   View,
   StyleSheet,
   Text,
   StatusBar,
   TouchableOpacity,
+  Image
 } from 'react-native';
 
 const statusBarHeigth = StatusBar.currentHeight ? StatusBar.currentHeight + 22 : 64;
 
-export default function Header({ name }) {
+export default function Header() {
+
+  const [image, setImage] = useState(null);
+  
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+  
+    console.log(result);
+  
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
   return(
     <View style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.username}>{ name }</Text>
+        <Text style={styles.appname}>App de Finanças</Text>
 
-        <TouchableOpacity activeOpacity={0.7} style={styles.buttonUser} >
-          <Feather name='user' size={27} color='white' />
+        <TouchableOpacity onPress={pickImage} activeOpacity={0.7} style={styles.buttonUser} >
+          <MaterialIcons name='add-photo-alternate' style={{ position: 'relative' }} size={27} color='white' />
+          {image && <Image source={{ uri: image }} style={{ width: 50, height: 50, borderRadius: 50/ 2, position: 'absolute' }} />}
         </TouchableOpacity>
       </View>
     </View>
@@ -39,17 +60,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
-  username: {
+  appname: {
     fontSize: 18,
     color: 'white',
     fontWeight: 'bold'
   },
   buttonUser: {
-    width: 44,
-    height: 44,
+    width: 50,
+    height: 50,
     backgroundColor: 'rgba(255,255,255, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 44 / 2,
+    borderRadius: 50 / 2,
   }
 })
